@@ -1,0 +1,73 @@
+# SPMCGSR
+Our article, titled "Single Phase Multi-view Clustering Using Unified Graph Learning and Spectral Representation", presents a novel multi-view clustering method: MCGLSR.
+
+The inputs of our proposed method are: 
+
+1) The multi-view input data matrix "X", "X" is a v-dimensional matrix formed by "v" different views;
+
+2) The number of different clusters in the dataset: Clusters_number;
+
+3) The different regularization parameters used to control the terms of our method: parameter;
+
+4) The total number of iterations: max_iter.
+
+
+Five regularization parameters are used in our method: lambda, lambda1, lambda2, lambda3, and lambda4:
+
+a) lambda is set to its default value "1";
+
+b) lambda1= [0.0005 0.05 0.5 1 10 1e+2];
+
+c) lambda2= [1e-7 1e-6 1e-5 1e-4 1e-3 1e-2 0.1 0.2 0.3 0.4 0.5 0.6 0.7];
+
+d) lambda3= [0.005 0.05 0.1 0.2 0.3 0.4 0.5 1 10 1e+2 ];
+
+e) and lambda4= [1e-7 1e-6 1e-5 1e-4 1e-3 1e-2 0.1 1 10 1e+2 ];
+
+e) In addition, another hyperparameter, used by our method, is the value of nearest samples "Knearest", 
+utilized to choose the nearest samples of a given datapoint in the obtained similarity matrices "S_v" and "S_average";
+
+Knearest= [5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20].
+
+
+- To ensure convergence, the maximum number of iterations is fixed at 20.
+
+- The outputs of the method are:
+
+1)The similarity matrices of all views S_v, which is a v-dimensional matrix corresponding to "v" different views;
+
+
+2) The consensus similarity matrix S_average, which is a 1-dimensional matrix, used to make the different similarity matrices similar, and used to reduce the effect of the noisy views;
+
+3) The consensus spectral projection matrix P_average, correponding to the consensus similarity matrix S_average. Similar to S_average, P_average is  a 1_dimensional matrix;
+
+4) The cluster index matrix H, which is a 1-dimensional nonnegative embedding matrix used to give the final clusters;
+
+5) The final clustering assignments y_idx, obtained by considering the index of the maximum value in each row of the matrix H.
+
+
+- The main steps of our  model are summarized below.
+ 
+1) We can run the main file directly;
+
+2) A step of data normalization is done: X=DataNormalization(X);
+
+
+3) The kernel matrices of all views are constructed to form the kernel matrix "Ke", which is also a v-dimensional matrix corresponding to all views: Ke=KernelMatrix(X{v});
+
+4) We initialize the similarity matrix of each view "S_v": [S_v,~]=ComputeGraph(X);
+
+
+5) We initialize the consensus similarity matrix "S_average": [~,S_average]=ComputeGraph(X); 
+
+
+6) We initialize the consensus spectral projection matrices "P_average": [~,P_average]=ComputeSpectralProjection(S_v,Clusters_number);
+
+7) An alternating optimization algorithm is introduced to update the matrices "H", "P_average", "S_v" and "S_average" respectively.
+
+Example: For the MSRCv1 dataset, if we run the main file (main.m), the best results are:
+ACC=0.95238
+NMI=0.90411
+Purity=0.95238
+ARI=0.89241
+
